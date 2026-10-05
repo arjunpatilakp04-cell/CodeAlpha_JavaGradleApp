@@ -1,16 +1,3 @@
-## API
-
-| Method | URL | What it does |
-|---|---|---|
-| POST | `/api/endpoints` | Add an endpoint to monitor |
-| GET | `/api/endpoints` | List all endpoints |
-| GET | `/api/endpoints/{id}` | Get one endpoint |
-| PUT | `/api/endpoints/{id}` | Update an endpoint |
-| DELETE | `/api/endpoints/{id}` | Delete an endpoint |
-| GET | `/api/endpoints/{id}/history` | Recent check results (`?limit=20`) |
-| GET | `/api/endpoints/{id}/uptime` | Uptime percentage |
-
-
 # Endpoint Monitor
 
 [![CI](https://github.com/arjunpatilakp04-cell/CodeAlpha_JavaGradleApp/actions/workflows/ci.yml/badge.svg)](https://github.com/arjunpatilakp04-cell/CodeAlpha_JavaGradleApp/actions/workflows/ci.yml)
@@ -19,11 +6,13 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-brightgreen)
 ![Gradle](https://img.shields.io/badge/build-Gradle-blue)
 
-A Spring Boot REST service built with Gradle for the CodeAlpha DevOps Internship, Task 3: Java Application using Gradle. It runs in Docker, is built and delivered by GitHub Actions, and is monitored with Prometheus and Grafana.
+A Spring Boot REST service built with Gradle for the CodeAlpha DevOps Internship, Task 3: Java Application using Gradle. It checks the health of the URLs you add, stores the results in PostgreSQL, and reports uptime. It runs in Docker, is built and delivered by GitHub Actions, and is monitored with Prometheus and Grafana.
 
 ## What it does
 
 - Builds the Java project with Gradle
+- Checks each monitored URL on a schedule and saves every result in PostgreSQL
+- Reports check history and uptime percentage through a REST API
 - Runs automated tests on every push (JUnit 5 and Testcontainers, against a real Postgres database)
 - Packages the app as a Docker image
 - Runs the tests in a CI workflow on every push
@@ -93,6 +82,34 @@ docker compose up -d --build
 | Raw metrics | http://localhost:8080/actuator/prometheus |
 | Prometheus | http://localhost:9090 |
 | Grafana | http://localhost:3000 (login: admin / admin) |
+
+## API
+
+| Method | URL | What it does |
+|---|---|---|
+| POST | `/api/endpoints` | Add an endpoint to monitor |
+| GET | `/api/endpoints` | List all endpoints |
+| GET | `/api/endpoints/{id}` | Get one endpoint |
+| PUT | `/api/endpoints/{id}` | Update an endpoint |
+| DELETE | `/api/endpoints/{id}` | Delete an endpoint |
+| GET | `/api/endpoints/{id}/history` | Recent check results (`?limit=20`) |
+| GET | `/api/endpoints/{id}/uptime` | Uptime percentage |
+
+A new endpoint needs three fields: `name`, `url` and `checkIntervalSeconds` (at least 10, default 60).
+
+Example (PowerShell):
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://localhost:8080/api/endpoints -ContentType "application/json" -Body '{"name":"Google","url":"https://www.google.com","checkIntervalSeconds":10}'
+```
+
+Example (curl):
+
+```bash
+curl -X POST http://localhost:8080/api/endpoints \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Google","url":"https://www.google.com","checkIntervalSeconds":10}'
+```
 
 ## Monitoring
 
