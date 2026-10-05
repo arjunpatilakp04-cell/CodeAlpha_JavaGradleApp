@@ -1,3 +1,16 @@
+## API
+
+| Method | URL | What it does |
+|---|---|---|
+| POST | `/api/endpoints` | Add an endpoint to monitor |
+| GET | `/api/endpoints` | List all endpoints |
+| GET | `/api/endpoints/{id}` | Get one endpoint |
+| PUT | `/api/endpoints/{id}` | Update an endpoint |
+| DELETE | `/api/endpoints/{id}` | Delete an endpoint |
+| GET | `/api/endpoints/{id}/history` | Recent check results (`?limit=20`) |
+| GET | `/api/endpoints/{id}/uptime` | Uptime percentage |
+
+
 # Endpoint Monitor
 
 [![CI](https://github.com/arjunpatilakp04-cell/CodeAlpha_JavaGradleApp/actions/workflows/ci.yml/badge.svg)](https://github.com/arjunpatilakp04-cell/CodeAlpha_JavaGradleApp/actions/workflows/ci.yml)
